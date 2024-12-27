@@ -1,0 +1,3 @@
+[submodule "evergreen"]
+	path = evergreen
+	url = git@github.com:purduehackers/evergreen.git
