@@ -7,8 +7,13 @@ FROM uv AS build
 
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+
+ADD .git /app/.git
 ADD pyproject.toml /app/
 ADD uv.lock /app/
+
+RUN git submodule update --init --recursive
 
 RUN uv sync --frozen
 

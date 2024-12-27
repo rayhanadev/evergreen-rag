@@ -10,16 +10,11 @@
 *.log
 *.tmp
 
-.git/
 .gitignore
 
 build/
 dist/
 *.egg-info/
-
-!evergreen/**/*.md
-*.md
-!README.md
 
 Dockerfile
 .dockerignore
