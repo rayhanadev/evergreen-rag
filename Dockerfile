@@ -13,12 +13,14 @@ RUN apt-get update && apt-get install -y \
     && curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
     && apt-get install -y git-lfs \
     && git lfs install \
+    && apt-get purge --auto-remove -y curl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 ADD .git /app/.git
-ADD pyproject.toml /app/
-ADD uv.lock /app/
+ADD pyproject.toml uv.lock /app/
+
+RUN git lfs pull && git submodule update --init --recursive --depth 1
 
 RUN git submodule update --init --recursive
 
@@ -26,6 +28,11 @@ RUN uv sync --frozen
 
 ADD . /app
 
-FROM build AS runtime
+FROM python:3.12-slim-bookworm AS runtime
+
+WORKDIR /app
+
+COPY --from=build /app /app
+COPY --from=build /bin/uv /bin/uv
 
 CMD ["uv", "run", "src/bot.py"]
