@@ -35,4 +35,6 @@ WORKDIR /app
 COPY --from=build /app /app
 COPY --from=build /bin/uv /bin/uv
 
+RUN rm -rf /app/.git
+
 CMD ["uv", "run", "src/bot.py"]
